@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+	<types>
+		<members>Project_Management</members>
+		<name>CustomApplication</name>
+	</types>
+	<types>
+		<members>Milestone_Todo__c</members>
+		<members>Milestone__c</members>
+		<members>Project__c</members>
+		<name>CustomObject</name>
+	</types>
+	<types>
+		<members>New_Project</members>
+		<members>Project_Management_UtilityBar</members>
+		<name>FlexiPage</name>
+	</types>
+	<types>
+		<members>*</members>
+		<name>LightningComponentBundle</name>
+	</types>
+	<types>
+		<members>Project_Manager</members>
+		<name>PermissionSet</name>
+	</types>
+	<version>60.0</version>
+</Package>
