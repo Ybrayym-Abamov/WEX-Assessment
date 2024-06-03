@@ -1,100 +1,56 @@
 <template>
 
 	<div class="main-container">
+		<template if:true={isLoading}>
+			<lightning-spinner alternative-text="Loading"></lightning-spinner>
+		</template>
 
-		<!--<div class="slds-page-header">
-		<div class="slds-page-header__row">
-			<div class="slds-page-header__col-title">
-				<div class="slds-media">
-					<div class="slds-media__figure">
-                        <lightning-icon icon-name="custom:custom27" alternative-text="Project"></lightning-icon>
-					</div>
-					<div class="slds-media__body">
-						<div class="slds-page-header__name">
-							<div class="slds-page-header__name-title">
-								<h1>
-									<span class="slds-page-header__title slds-truncate" title="New Project">New Project</span>
-								</h1>
-							</div>
-						</div>
-					</div>
-				</div>
+        <lightning-card  title="Projects">
+            <lightning-button label="New Project" slot="actions" onclick={showProjectModal}></lightning-button>
+            <div class="slds-p-horizontal_small">
+				<div style="height: 200px;">
+				<template if:true={projectList}>
+					<lightning-datatable
+							key-field="id"
+							data={projectList}
+							columns={columns}
+							hide-checkbox-column
+							onrowaction={handleRowAction}>
+					</lightning-datatable>
+				</template>
+				</div>	
 			</div>
-		</div>
-	</div>-->
-		<lightning-card title="Project Detail">
-			<lightning-layout multiple-rows>
+        </lightning-card>
+	</div><br />
+	<template if:true={isShowMilestoneSection}>
+		<c-milestone-component project-id={currentProjectId} project-record={currentProjectRecord}></c-milestone-component>
+	</template>
 
-				<lightning-layout-item padding="around-small" size="12">
-					<lightning-layout>
-						<lightning-layout-item padding="around-small" size="4">
-							<lightning-input type="text" label="Project Name" onchange={handleOnChange}>
-							</lightning-input>
-						</lightning-layout-item>
-						<lightning-layout-item padding="around-small" size="4">
-							<lightning-record-picker label="Project Owner" placeholder="Search User..."
-								object-api-name="User" onchange={handleOnChange}>
-							</lightning-record-picker>
-						</lightning-layout-item>
-					</lightning-layout>
-				</lightning-layout-item>
-
-				<lightning-layout-item padding="around-small" size="12">
-					<lightning-card title="Milestones">
-						<lightning-button label="New" slot="actions"></lightning-button>
-						<div class="slds-p-around_medium">
-							<lightning-accordion allow-multiple-sections-open>
-								<lightning-accordion-section name="Milestone1" label="Milestone1">
-									<lightning-layout multiple-rows>
-										<lightning-layout-item padding="around-small" size="4">
-											<lightning-input type="text" label="Milestone Name"
-												onchange={handleOnChange}>
-											</lightning-input>
-										</lightning-layout-item>
-										<lightning-layout-item padding="around-small" size="4">
-											<lightning-input type="date" label="Due Date" onchange={handleOnChange}>
-											</lightning-input>
-										</lightning-layout-item>
-										<lightning-layout-item padding="around-small" size="12">
-											<lightning-card title="Milestone Todos">
-												<lightning-button label="New" slot="actions"></lightning-button>
-											</lightning-card>
-										</lightning-layout-item>
-									</lightning-layout>
-								</lightning-accordion-section>
-								<lightning-accordion-section name="Milestone2" label="Milestone2">
-									<lightning-layout>
-										<lightning-layout-item padding="around-small" size="4">
-											<lightning-input type="text" label="Milestone Name"
-												onchange={handleOnChange}>
-											</lightning-input>
-										</lightning-layout-item>
-										<lightning-layout-item padding="around-small" size="4">
-											<lightning-input type="date" label="Due Date" onchange={handleOnChange}>
-											</lightning-input>
-										</lightning-layout-item>
-									</lightning-layout>
-								</lightning-accordion-section>
-								<lightning-accordion-section name="Milestone3" label="Milestone3">
-									<lightning-layout>
-										<lightning-layout-item padding="around-small" size="4">
-											<lightning-input type="text" label="Milestone Name"
-												onchange={handleOnChange}>
-											</lightning-input>
-										</lightning-layout-item>
-										<lightning-layout-item padding="around-small" size="4">
-											<lightning-input type="date" label="Due Date" onchange={handleOnChange}>
-											</lightning-input>
-										</lightning-layout-item>
-									</lightning-layout>
-								</lightning-accordion-section>
-							</lightning-accordion>
-						</div>
-					</lightning-card>
-				</lightning-layout-item>
-			</lightning-layout>
-		</lightning-card>
-
-	</div>
+   <template if:true={isShowProjectModal}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+       <div class="slds-modal__container">
+          <header class="slds-modal__header">
+             <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideProjectModal}>
+                <lightning-icon icon-name="utility:close"
+                   alternative-text="close"
+                   variant="inverse"
+                   size="small" ></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+             </button>
+             <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Project</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+			<lightning-record-edit-form object-api-name="Project__c" onsuccess={handleSuccess}>
+				<lightning-input-field field-name="Name" required="true"> </lightning-input-field>
+				<lightning-input-field field-name="Project_Owner__c" required="true"> </lightning-input-field>
+				<div class="slds-var-m-top_medium">
+					<lightning-button variant="brand" type="submit" label="Save"></lightning-button>
+				</div>
+			</lightning-record-edit-form>
+          </div>
+       </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+ </template>
 
 </template>
