@@ -1,0 +1,49 @@
+public with sharing class ProjectManagerController {
+    @AuraEnabled
+    public static List<Project__c> getProjects() { 
+        List<Project__c> listProject=[
+            SELECT Id, Name,CreatedBy.Name,CreatedDate,Project_Owner__r.Name,
+            Percentage_Complete__c,Status__c ,Total_Milestones__c,Total_Milestones_Percent_Complete__c 
+            FROM Project__c
+        ];
+        return listProject;
+    }
+    
+    @AuraEnabled(cacheable=true)
+    public static List<Milestone__c> getMilestones(String projectId) {
+        List<Milestone__c> listMilestone=[
+            SELECT Id, Name,Due_Date__c,Percentage_Complete__c,Status__c ,
+            Total_Complete_Milestone_Todos__c,Total_Milestone_Todos__c,CreatedDate,CreatedBy.Name,
+            (Select Id,Name,Status__c,Due_Date__c FROM Milestone_Todos__r)
+            FROM Milestone__c WHERE project__c=:projectId
+        ];
+        return listMilestone;
+    }
+
+    @AuraEnabled
+    public static List<Milestone__c> loadMilestoneList(String projectId) {
+        return getMilestones(projectId);
+    }
+
+    @AuraEnabled
+    public static void deleteMilestone(String milestoneId) {
+        try{
+        	Milestone__c m = [Select Id FROM Milestone__c WHERE Id=:milestoneId];
+            delete m;
+        }catch(Exception e){
+            throw e;
+        }
+    }
+
+    @AuraEnabled
+    public static void deleteProject(String projectId) {
+        try{
+        	Project__c p = [Select Id FROM Project__c WHERE Id=:projectId];
+            delete p;
+        }catch(Exception e){
+            throw e;
+        }
+    }
+    
+    
+}
