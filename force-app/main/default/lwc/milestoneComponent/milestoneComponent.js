@@ -19,7 +19,7 @@ export default class MilestoneComponent extends LightningElement {
             label: 'Name',
             fieldName: 'actionUrl',
             type: 'url',
-            typeAttributes: {
+            typeAttributes: { 
                 label: { fieldName: 'Name' },
                 target: '_blank'
             }
